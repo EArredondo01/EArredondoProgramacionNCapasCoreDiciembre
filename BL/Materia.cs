@@ -12,14 +12,14 @@ namespace BL
             ML.Result result = new ML.Result();
             try
             {
-                using (DL.EarredondoProductoDiciembreContext context = new DL.EarredondoProductoDiciembreContext())
+                using (DL.JguevaraDiciembreContext context = new DL.JguevaraDiciembreContext())
                 {
 
                     //ComObject ejecutar los SPs con EF Core
                     // Consultas SELECT                  
                     // context.TABLENAME.FromSQLRaw('id')
-                    
-                    var listaMateria = context.Productos.FromSqlRaw("EXECUTE ProductoGetAll").ToList();
+
+                    var listaMateria = context.MateriaGetAllDTO.FromSqlRaw("EXECUTE MateriaGetAll").ToList();
 
                     // clase DTO, como funciona, como se configura en NETCore
 
@@ -27,9 +27,9 @@ namespace BL
                     // DML (INSERT, UPDATE, DELETE) = filas afecatdas
                     int filasAfecadas = context.Database.ExecuteSqlRaw("EXECUTE spName");
 
-                    if(listaMateria.Count > 0)
+                    if (listaMateria.Count > 0)
                     {
-
+                        
                     }
                     else
                     {
