@@ -14,4 +14,7 @@ public partial class Producto
     public decimal? Costo { get; set; }
 
     public byte[]? Imagen { get; set; }
+
+
+
 }

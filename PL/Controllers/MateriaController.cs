@@ -6,6 +6,8 @@ namespace PL.Controllers
     {
         public IActionResult GetAll()
         {
+            ML.Result result = BL.Materia.GetAll();
+
             return View();
         }
     }
