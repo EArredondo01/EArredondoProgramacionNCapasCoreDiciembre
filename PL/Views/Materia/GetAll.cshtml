@@ -1,5 +1,56 @@
-﻿@*
+﻿@model ML.Materia
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+
+}
+
+
+
+
+@if(Model.Materias != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Promedio</th>
+                <th scope="col">Grupos</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (ML.Materia materia in Model.Materias)
+            {
+                <tr>
+                    <td>@materia.Nombre</td>
+                    <td>@materia.Promedio</td>
+
+                    @if(materia.Grupo.Grupos != null)
+                    {
+                        <td>
+                            @foreach (var grupo in materia.Grupo.Grupos)
+                            {
+                                <div>
+                                    pintar grupos
+                                </div>
+                            }
+                        </td>                                            
+                    }
+                    else
+                    {
+                        <td>
+                            Esta materia no tiene grupos asignados aun.
+                        </td>
+                    }
+                    
+                </tr>
+            }          
+        </tbody>
+    </table>
+}
+else
+{
+    // 
 }

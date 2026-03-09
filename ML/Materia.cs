@@ -10,7 +10,9 @@ namespace ML
     {
         public int IdMateria { get; set; }
         public string? Nombre { get; set; }
-        public string? Descripcion { get; set; }
+        public decimal? Promedio { get; set; }
         public ML.Semestre? Semestre { get; set; }
+        public ML.Grupo? Grupo { get; set; }
+        public List<object>? Materias { get; set; }
     }
 }
