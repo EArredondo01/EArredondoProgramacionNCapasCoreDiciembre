@@ -1,8 +1,7 @@
 ﻿using DL;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.InteropServices.Marshalling;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 namespace BL
 {
@@ -15,7 +14,6 @@ namespace BL
             {
                 using (DL.JguevaraDiciembreContext context = new DL.JguevaraDiciembreContext())
                 {
-
                     //ComObject ejecutar los SPs con EF Core
                     // Consultas SELECT                  
                     // context.TABLENAME.FromSQLRaw('id')
@@ -68,9 +66,12 @@ namespace BL
                     else
                     {
 
-                    }
+                    }                      
 
                 }
+
+
+
             } catch(Exception ex)
             {
                 result.Correct = false;
@@ -79,6 +80,33 @@ namespace BL
 
             return result;
         }
+
+        public static ML.Result Add(ML.Materia materia)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+
+                var IdMateria = 0;
+
+                // Agregar Materia
+
+                IdMateria = 4;
+
+
+                result.Correct = true;
+                result.Object = IdMateria;
+
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+            }
+
+            return result;
+        }
+
 
     }
 }
