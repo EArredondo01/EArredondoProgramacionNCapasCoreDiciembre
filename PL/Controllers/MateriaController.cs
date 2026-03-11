@@ -60,10 +60,10 @@ namespace PL.Controllers
             {
                 // Add  (Materia y Grupo)
 
-                materia.Nombre = "Artes";
+                materia.Nombre = "Artes2";
                 materia.Promedio = 10;
-                materia.Costo = 74;
-                materia.UserName = "UserArtes";
+                materia.Costo = 77;
+                materia.UserName = "UserArtes2";
                 materia.FechaRegistro = DateTime.Now;
                 
                 materia.Semestre = new ML.Semestre();

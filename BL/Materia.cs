@@ -91,32 +91,34 @@ namespace BL
 
                 using (DL.JguevaraDiciembreContext context = new DL.JguevaraDiciembreContext())
                 {
-                    var IdMateria = 0;
-
                     var IdMateriaOutput = new SqlParameter("@IdMateria", SqlDbType.Int)
                     {
-                        Direction = ParameterDirection.Output,
-                        DbType = DbType.Int32
+                        Direction = ParameterDirection.Output                    
                     };
 
-                    var filasAfectadas = context.Database.ExecuteSqlRaw("MateriaAdd @Nombre, @Promedio, @FechaRegistro, @Costo, @UserName, @IdSemestre, @Imagen, @IdMateria",
+                    var imagenParam = new SqlParameter("@Imagen", SqlDbType.VarBinary)
+                    {
+                        Value = materia.Imagen == null ? DBNull.Value : materia.Imagen
+                    };
+
+                    var filasAfectadas = context.Database.ExecuteSqlRaw("MateriaAdd @Nombre, @Promedio, @FechaRegistro, @Costo, @UserName, @IdSemestre, @Imagen, @IdMateria OUTPUT",
                         new SqlParameter("@Nombre", materia.Nombre),
                         new SqlParameter("@Promedio", materia.Promedio),
                         new SqlParameter("@FechaRegistro", materia.FechaRegistro),
                         new SqlParameter("@Costo", materia.Costo),
                         new SqlParameter("@UserName", materia.UserName),
                         new SqlParameter("@IdSemestre", materia.Semestre.IdSemestre),
-                        new SqlParameter("@Imagen",  SqlDbType.VarBinary),
-                         IdMateriaOutput);
+                        imagenParam,
+                        IdMateriaOutput);
 
 
-                    // Agregar Materia
+                    if(filasAfectadas > 0)
+                    {                       
+                        result.Correct = true;
+                        result.Object = (int)IdMateriaOutput.Value;
+                    }
 
-                    IdMateria = 4;
-
-
-                    result.Correct = true;
-                    result.Object = IdMateria;
+                   
                 }
 
             }
