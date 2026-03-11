@@ -1,6 +1,7 @@
 ﻿using DL;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 
 namespace BL
@@ -33,7 +34,7 @@ namespace BL
                         foreach (var materiaDB in listaMaterias)
                         {
                             ML.Materia materia = new ML.Materia();
-                            
+
                             materia.IdMateria = materiaDB.IdMateria;
                             materia.Nombre = materiaDB.MateriaNombre;
                             materia.Promedio = materiaDB.Promedio;
@@ -43,7 +44,7 @@ namespace BL
                             // Sacar las direcciones (Grupos):
                             var listaGrupos = context.Grupos.FromSqlRaw($"EXECUTE GrupoGetByIdMateria {materiaDB.IdMateria}").ToList();
 
-                            if(listaGrupos.Count > 0)
+                            if (listaGrupos.Count > 0)
                             {
                                 materia.Grupo = new ML.Grupo();
                                 materia.Grupo.Grupos = new List<object>();
@@ -58,7 +59,7 @@ namespace BL
                                     grupo.Plantel.IdPlantel = grupoDB.IdPlantel.Value;
 
                                     materia.Grupo.Grupos.Add(grupo);
-                                }                               
+                                }
                             }
                             result.Objects.Add(materia);
                         }
@@ -66,13 +67,14 @@ namespace BL
                     else
                     {
 
-                    }                      
+                    }
 
                 }
 
 
 
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
@@ -87,15 +89,35 @@ namespace BL
             try
             {
 
-                var IdMateria = 0;
+                using (DL.JguevaraDiciembreContext context = new DL.JguevaraDiciembreContext())
+                {
+                    var IdMateria = 0;
 
-                // Agregar Materia
+                    var IdMateriaOutput = new SqlParameter("@IdMateria", SqlDbType.Int)
+                    {
+                        Direction = ParameterDirection.Output,
+                        DbType = DbType.Int32
+                    };
 
-                IdMateria = 4;
+                    var filasAfectadas = context.Database.ExecuteSqlRaw("MateriaAdd @Nombre, @Promedio, @FechaRegistro, @Costo, @UserName, @IdSemestre, @Imagen, @IdMateria",
+                        new SqlParameter("@Nombre", materia.Nombre),
+                        new SqlParameter("@Promedio", materia.Promedio),
+                        new SqlParameter("@FechaRegistro", materia.FechaRegistro),
+                        new SqlParameter("@Costo", materia.Costo),
+                        new SqlParameter("@UserName", materia.UserName),
+                        new SqlParameter("@IdSemestre", materia.Semestre.IdSemestre),
+                        new SqlParameter("@Imagen",  SqlDbType.VarBinary),
+                         IdMateriaOutput);
 
 
-                result.Correct = true;
-                result.Object = IdMateria;
+                    // Agregar Materia
+
+                    IdMateria = 4;
+
+
+                    result.Correct = true;
+                    result.Object = IdMateria;
+                }
 
             }
             catch (Exception ex)

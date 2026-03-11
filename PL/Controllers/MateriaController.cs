@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ML;
 
 namespace PL.Controllers
 {
@@ -8,9 +9,15 @@ namespace PL.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
+            ML.Materia materia = new ML.Materia();
             ML.Result result = BL.Materia.GetAll();
 
-            return View();
+            if (result.Correct)
+            {
+                materia.Materias = result.Objects;
+            }
+
+            return View(materia);
         }
 
 
@@ -48,11 +55,19 @@ namespace PL.Controllers
                 //    // materia.IdMateria = (int)resultMateria.Object;
                 //    // BL.Grupo.Add(materia);
                 //}
-
             }
             else
             {
                 // Add  (Materia y Grupo)
+
+                materia.Nombre = "Artes";
+                materia.Promedio = 10;
+                materia.Costo = 74;
+                materia.UserName = "UserArtes";
+                materia.FechaRegistro = DateTime.Now;
+                
+                materia.Semestre = new ML.Semestre();
+                materia.Semestre.IdSemestre = 1;
 
                 ML.Result resultMateria = BL.Materia.Add(materia);
 
@@ -69,5 +84,6 @@ namespace PL.Controllers
 
             return View(materia);
         }
+
     }
 }

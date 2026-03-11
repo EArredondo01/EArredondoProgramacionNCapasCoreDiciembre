@@ -17,4 +17,7 @@ namespace DL
         public byte[]? Imagen { get; set; }
         public string? SemestreNombre { get; set; }
     }
+
+
+    // todo los DTOs necesarios
 }
