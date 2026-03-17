@@ -40,10 +40,13 @@ namespace PL.Controllers
 
 
         [HttpPost]
-        public IActionResult Formulario(ML.Materia materia)
+        public IActionResult Formulario(ML.Materia materia, IFormFile archivo)
         {
             if(materia.IdMateria > 0)
             {
+
+                archivo.OpenReadStream();
+
                 // Update
 
                 // ML.Result result = BL.Materia.Update(materia);

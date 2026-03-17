@@ -61,6 +61,10 @@ namespace BL
                                     materia.Grupo.Grupos.Add(grupo);
                                 }
                             }
+
+
+
+
                             result.Objects.Add(materia);
                         }
                     }
