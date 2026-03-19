@@ -5,12 +5,17 @@ namespace PL.Controllers
 {
     public class MateriaController : Controller
     {
+        private readonly BL.Materia _materia;
+        public MateriaController(BL.Materia materia)
+        {
+            this._materia = materia;
+        }
 
         [HttpGet]
         public IActionResult GetAll()
         {
             ML.Materia materia = new ML.Materia();
-            ML.Result result = BL.Materia.GetAll();
+            ML.Result result = _materia.GetAll();
 
             if (result.Correct)
             {
@@ -72,7 +77,7 @@ namespace PL.Controllers
                 materia.Semestre = new ML.Semestre();
                 materia.Semestre.IdSemestre = 1;
 
-                ML.Result resultMateria = BL.Materia.Add(materia);
+                ML.Result resultMateria = _materia.Add(materia);
 
                 if (resultMateria.Correct && (int)resultMateria.Object > 0)
                 {

@@ -8,18 +8,24 @@ namespace BL
 {
     public class Materia
     {
-        public static ML.Result GetAll()
+        private readonly DL.JguevaraDiciembreContext _context;
+
+        public Materia(DL.JguevaraDiciembreContext context)
+        {
+            this._context = context;
+        }
+
+        public ML.Result GetAll()
         {
             ML.Result result = new ML.Result();
             try
             {
-                using (DL.JguevaraDiciembreContext context = new DL.JguevaraDiciembreContext())
-                {
+                
                     //ComObject ejecutar los SPs con EF Core
                     // Consultas SELECT                  
                     // context.TABLENAME.FromSQLRaw('id')
 
-                    var listaMaterias = context.MateriaGetAllDTO.FromSqlRaw("EXECUTE MateriaGetAll").ToList();
+                    var listaMaterias = _context.MateriaGetAllDTO.FromSqlRaw("EXECUTE MateriaGetAll").ToList();
 
                     // clase DTO, como funciona, como se configura en NETCore
 
@@ -42,7 +48,7 @@ namespace BL
                             // resto de informacion....
 
                             // Sacar las direcciones (Grupos):
-                            var listaGrupos = context.Grupos.FromSqlRaw($"EXECUTE GrupoGetByIdMateria {materiaDB.IdMateria}").ToList();
+                            var listaGrupos = _context.Grupos.FromSqlRaw($"EXECUTE GrupoGetByIdMateria {materiaDB.IdMateria}").ToList();
 
                             if (listaGrupos.Count > 0)
                             {
@@ -73,7 +79,7 @@ namespace BL
 
                     }
 
-                }
+                
 
 
 
@@ -87,14 +93,11 @@ namespace BL
             return result;
         }
 
-        public static ML.Result Add(ML.Materia materia)
+        public ML.Result Add(ML.Materia materia)
         {
             ML.Result result = new ML.Result();
             try
-            {
-
-                using (DL.JguevaraDiciembreContext context = new DL.JguevaraDiciembreContext())
-                {
+            {              
                     var IdMateriaOutput = new SqlParameter("@IdMateria", SqlDbType.Int)
                     {
                         Direction = ParameterDirection.Output                    
@@ -105,7 +108,7 @@ namespace BL
                         Value = materia.Imagen == null ? DBNull.Value : materia.Imagen
                     };
 
-                    var filasAfectadas = context.Database.ExecuteSqlRaw("MateriaAdd @Nombre, @Promedio, @FechaRegistro, @Costo, @UserName, @IdSemestre, @Imagen, @IdMateria OUTPUT",
+                    var filasAfectadas = _context.Database.ExecuteSqlRaw("MateriaAdd @Nombre, @Promedio, @FechaRegistro, @Costo, @UserName, @IdSemestre, @Imagen, @IdMateria OUTPUT",
                         new SqlParameter("@Nombre", materia.Nombre),
                         new SqlParameter("@Promedio", materia.Promedio),
                         new SqlParameter("@FechaRegistro", materia.FechaRegistro),
@@ -120,10 +123,7 @@ namespace BL
                     {                       
                         result.Correct = true;
                         result.Object = (int)IdMateriaOutput.Value;
-                    }
-
-                   
-                }
+                    }              
 
             }
             catch (Exception ex)
